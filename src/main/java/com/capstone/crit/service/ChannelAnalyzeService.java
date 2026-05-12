@@ -715,9 +715,8 @@ public class ChannelAnalyzeService {
         ctrFactor.put("name", "CTR");
         ctrFactor.put("score", ctrScore);
         ctrFactor.put("topPercent", 100 - ctrScore);
-        ctrFactor.put("rawValue", String.format("%.1f%%", ctr * 100));
         ctrFactor.put("changePercent", channelAvgCtr > 0
-                ? Math.round((ctr - channelAvgCtr) / channelAvgCtr * 1000.0) / 10.0 : null);
+                ? Math.round((ctr - channelAvgCtr) * 1000.0) / 10.0 : null);
         ctrFactor.put("description", getCtrDescription(ctrScore));
         factors.add(ctrFactor);
 
@@ -725,10 +724,8 @@ public class ChannelAnalyzeService {
         watchFactor.put("name", "시청 지속 시간");
         watchFactor.put("score", watchScore);
         watchFactor.put("topPercent", 100 - watchScore);
-        watchFactor.put("rawValue", String.format("%.0f초 (유지율 %.0f%%)", avgWatchSec,
-                durationSeconds > 0 ? avgWatchSec / durationSeconds * 100 : 0));
         watchFactor.put("changePercent", channelAvgWatchSec != null && channelAvgWatchSec > 0
-                ? Math.round((avgWatchSec - channelAvgWatchSec) / channelAvgWatchSec * 1000.0) / 10.0 : null);
+                ? Math.round(avgWatchSec - channelAvgWatchSec) : null);
         watchFactor.put("description", getWatchDurationDescription(watchScore));
         factors.add(watchFactor);
 
@@ -736,8 +733,7 @@ public class ChannelAnalyzeService {
         recommendFactor.put("name", "추천 확장성");
         recommendFactor.put("score", recommendScore);
         recommendFactor.put("topPercent", 100 - recommendScore);
-        recommendFactor.put("rawValue", String.format("%.1f%%", recommendPct * 100));
-        recommendFactor.put("changePercent", Math.round((recommendPct - 0.30) / 0.30 * 1000.0) / 10.0);
+        recommendFactor.put("changePercent", Math.round((recommendPct - 0.30) * 1000.0) / 10.0);
         recommendFactor.put("description", getRecommendDescription(recommendScore));
         factors.add(recommendFactor);
         return new VideoFactorsResult(factors, ctr, avgWatchSec, recommendPct);
